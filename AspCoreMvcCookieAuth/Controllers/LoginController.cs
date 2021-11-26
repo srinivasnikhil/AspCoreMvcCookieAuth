@@ -46,8 +46,13 @@ namespace AspCoreMvcCookieAuth.Controllers
                         HttpContext.Session.SetString("empname",objempLogin.EmpName);
                         HttpContext.Session.SetInt32("empid", Convert.ToInt32(objempLogin.Id));
 
+                        return RedirectToAction("Index", "Home");
                     }
-                    return RedirectToAction("Index", "Home");
+                    else
+                    {
+                        return View();
+                    }
+                    
                 }
                 else
                 {
