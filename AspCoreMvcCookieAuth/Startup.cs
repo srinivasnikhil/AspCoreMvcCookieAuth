@@ -29,7 +29,7 @@ namespace AspCoreMvcCookieAuth
             var connection = Configuration.GetConnectionString("sqlcon");
             ShareConnectionString.Value = connection;
             services.AddSingleton<ILoginRepository, LoginRepository>();
-            services.AddAuthentication("CookieAuthentication").AddCookie("CookieAuthentication", config =>
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(config =>
              {
                  config.Cookie.Name = "UserLoginCookie";
                  config.LoginPath = "/Login/Index";

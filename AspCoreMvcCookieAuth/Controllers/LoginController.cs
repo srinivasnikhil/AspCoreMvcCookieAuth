@@ -1,6 +1,7 @@
 ﻿using AspCoreMvcCookieAuth.Models;
 using AspCoreMvcCookieAuth.Repository;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -64,7 +65,9 @@ namespace AspCoreMvcCookieAuth.Controllers
             try
             {
                 string cookie = Request.Cookies["UserLoginCookie"];
-                await HttpContext.SignOutAsync();
+                Response.Cookies.Delete(".AspNetCore.UserLoginCookie");
+                HttpContext.Session.Clear();
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                 EmpLoginTransaction objempLoginTransaction = new EmpLoginTransaction();
                 objempLoginTransaction.LogOutTime = DateTime.UtcNow;
                 await _loginRepository.UpdateLogOutTime(objempLoginTransaction.LogOutTime,cookie);
