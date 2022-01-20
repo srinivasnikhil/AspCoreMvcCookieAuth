@@ -15,9 +15,11 @@ namespace AspCoreMvcCookieAuth.Controllers
     public class LoginController : Controller
     {
         private readonly ILoginRepository _loginRepository;
-        public LoginController(ILoginRepository loginRepository)
+        private readonly MemoryCacheTicketStore _memoryCacheTicketStore;
+        public LoginController(ILoginRepository loginRepository,MemoryCacheTicketStore memoryCacheTicketStore)
         {
             _loginRepository = loginRepository;
+            _memoryCacheTicketStore = memoryCacheTicketStore;
         }
         public IActionResult Index()
         {
@@ -34,6 +36,8 @@ namespace AspCoreMvcCookieAuth.Controllers
                     objempLogin = await _loginRepository.CheckAuthenticationAsync(Username, Password);
                     if (objempLogin != null)
                     {
+                        await _memoryCacheTicketStore.ClearAll();
+
                         var userClaims = new List<Claim>()
                         {
                             new Claim(ClaimTypes.Name,objempLogin.EmpName)

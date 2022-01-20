@@ -29,11 +29,14 @@ namespace AspCoreMvcCookieAuth
             var connection = Configuration.GetConnectionString("sqlcon");
             ShareConnectionString.Value = connection;
             services.AddSingleton<ILoginRepository, LoginRepository>();
+            MemoryCacheTicketStore memoryCacheTicketStore = new MemoryCacheTicketStore();
+            services.AddSingleton<MemoryCacheTicketStore>(memoryCacheTicketStore);
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(config =>
              {
                  config.Cookie.Name = "UserLoginCookie";
                  config.LoginPath = "/Login/Index";
                  config.LogoutPath = "/Login/LogOut";
+                 config.SessionStore = memoryCacheTicketStore;
              });
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
